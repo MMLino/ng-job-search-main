@@ -17,15 +17,13 @@ import { JobDetailsComponent } from '../job-details/job-details.component';
 export class JobListComponent {
 
   jobs$: Observable<Job[]>;
+  favIdsFromLocal = JSON.parse(localStorage.getItem('favorites') ?? '[]') as number[]; // if favorites doesn't exist will be empty number array, list from localStrorage otherwise
 
   constructor(private jobService: JobService) {
-    this.jobs$ = this.jobService.jobs().pipe(tap((data: Job[]) => {
-      const favorites = JSON.parse(localStorage.getItem('favorites') ?? '[]');
-      return map(data, (j: Job) => {
-        j.isFavorite = includes(favorites, j.id) ? true : false;
-        return j
+    this.jobs$ = this.jobService.jobs().pipe(tap((data: Job[]) => { // tap used to modify the objects' list
+       map(data, (j: Job) => { // lodash map iterate the data array
+        j.isFavorite = includes(this.favIdsFromLocal, j.id) ? true : false; // if fav from localStorage contains job.id isFavorite is true, false otherwise
       })
     }));
   }
-
 }

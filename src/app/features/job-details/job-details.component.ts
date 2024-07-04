@@ -1,10 +1,10 @@
-import { Component, Input, TemplateRef } from '@angular/core';
+import { Component } from '@angular/core';
 import { Job } from '../../shared/model/job.interface';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { Observable, tap } from 'rxjs';
 import { JobService } from '../../shared/job.service';
 import { AsyncPipe, CommonModule } from '@angular/common';
-import { DomSanitizer } from '@angular/platform-browser';
+
 
 @Component({
   selector: 'app-job-details',
@@ -15,19 +15,21 @@ import { DomSanitizer } from '@angular/platform-browser';
 })
 export class JobDetailsComponent {
   jobDetail$: Observable<Job>;
-  // jobDescTemplate: TemplateRef<any> | null = null;
+  
   constructor(
     private route: ActivatedRoute,
     private jobService: JobService,
-    private sanitizer: DomSanitizer
   ) {
-    const id = this.route.snapshot.paramMap.get('job')!;
+    const id = this.route.snapshot.paramMap.get('job')!; // retrieve job id from URL
+
+    // call to job service to retrieve job's details
     this.jobDetail$ = this.jobService.job(parseInt(id)).pipe(
-      tap(response => { console.log("Detail", response); })
+      tap(response => { console.log("Job details", response); }) // simple details log
     )
   }
 
+  // used to go back to the page which open the job details
   goBack() {
-    history.back();
+    history.back(); // I'm using history obj to go back to the previous list page (list or favorites) before the details page
   }
 }

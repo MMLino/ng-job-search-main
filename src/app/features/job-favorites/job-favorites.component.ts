@@ -2,7 +2,7 @@ import { Component, OnDestroy } from '@angular/core';
 import { Observable, Subscription, map, of } from 'rxjs';
 import { Job } from '../../shared/model/job.interface';
 import { JobService } from '../../shared/job.service';
-import { map as lMap, find } from 'lodash';
+import { map as lMap, find, filter, includes } from 'lodash';
 import { AsyncPipe, CommonModule } from '@angular/common';
 import { JobElementListComponent } from '../../shared/job-element-list/job-element-list.component';
 import { JobDetailsComponent } from '../job-details/job-details.component';
@@ -14,33 +14,43 @@ import { JobDetailsComponent } from '../job-details/job-details.component';
   templateUrl: './job-favorites.component.html',
   styleUrl: './job-favorites.component.css'
 })
-export class JobFavoritesComponent implements OnDestroy {
-  jobs$: Observable<Job[] | null> = of([]);
-  subscriptions = new Subscription();
-  favFromLocal = JSON.parse(localStorage.getItem('favorites') ?? '[]') as number[];
+export class JobFavoritesComponent { // OLD --> implements OnDestroy {
+  jobs$: Observable<Job[] | null>;
+  // OLD --> subscriptions = new Subscription(); // subscriptions container to unsubscribe as the component destroy
+  favIdsFromLocal = JSON.parse(localStorage.getItem('favorites') ?? '[]') as number[]; // if favorites doesn't exist will be empty number array, list from localStrorage otherwise
 
   constructor(private jobService: JobService) {
-    this.jobs$ = this._drawFavoritesList();
+    this.jobs$ = this._drawFavoritesList(); // jobs observable init
     
-    this.subscriptions.add(
-      this.jobService.favoritesUpdated.subscribe(() => {
-        this.jobs$ = this._drawFavoritesList();
-      })
-    )
+    // start - OLD
+    // // listener for fav updates
+    // this.subscriptions.add(
+    //   this.jobService.favoritesUpdated.subscribe(() => { // triggered from JobService when fav. list change during the fav. component's navigation
+    //     this.jobs$ = this._drawFavoritesList(); // jobs observable update
+    //   })
+    // );
+    // end - OLD
   }
   
+  // start - OLD
+  // private _drawFavoritesList(): Observable<Job[] | null> {
+  //   return this.jobService.jobs().pipe(map((data: Job[]) => { // map to return a new list (only favorites)
+  //     const favJobs = filter(data, d => includes(this.favIdsFromLocal, d.id)); // filtering jobs contains in favorites
+  //     const favWithStars = lMap(favJobs, job => {
+  //       job.isFavorite = true; // set isFavorite boolean as true to see the star active into list
+  //       return job;
+  //     });
+  //     return favWithStars.length ? favWithStars : null; // if fav is empty return a null value, fav job list otherwise
+  //   }));
+  // }
+  // end - OLD
   private _drawFavoritesList(): Observable<Job[] | null> {
-    return this.jobService.jobs().pipe(map((data: Job[]) => { // map to return a new list (only favorites)
-      const favWithStars = lMap(this.favFromLocal, jobId => {
-        const job = find(data, { id: jobId})! as Job;
-        job.isFavorite = true; 
-        return job;
-      }); // filtering jobs contains in favorites
-      return favWithStars.length ? favWithStars : null 
+    return this.jobService.jobs().pipe(map((data: Job[]) => { // map used to modify the list. needed to return only favorites
+      return filter(data, d => includes(this.favIdsFromLocal, d.id)); // filtering jobs retrieved
     }));
   }
 
-  ngOnDestroy(): void {
-    this.subscriptions.unsubscribe();
-  }
+  // ngOnDestroy(): void {
+  //   this.subscriptions.unsubscribe();
+  // }
 }
