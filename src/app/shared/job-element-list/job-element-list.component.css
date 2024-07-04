@@ -1,0 +1,8 @@
+.job-row-container {
+    height: 7rem;
+}
+
+.job-title:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}

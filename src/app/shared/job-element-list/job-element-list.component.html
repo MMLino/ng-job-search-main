@@ -1,0 +1,10 @@
+<div class="d-flex align-items-center job-row-container">
+    <div class="image-container">
+        <img class="logo" src="{{ job.companyLogo }}" alt="Logo: {{ job.companyName }}">
+    </div>
+    <div class="d-flex flex-column flex-grow-1 ms-3">
+        <h3 [routerLink]="['/detail', job.id]" class="job-title">{{ job.title }}</h3>
+        <h5> Company: {{ job.companyName }} Reference: {{ job.reference }}</h5>
+    </div>
+    <span *ngIf="!isFromFavorites" id="star-{{job.id}}" class="icon-star" [class.active]="job.isFavorite" (click)="toggleFavorite()"></span>
+</div>

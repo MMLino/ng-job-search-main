@@ -1,0 +1,8 @@
+<div class="container">
+    <h1>{{ 'Find your job' | titlecase }}</h1>
+    <div class="d-flex flex-row align-items-center tab-container">
+        <div class="d-flex flex-grow-1 align-items-center justify-content-center tab" [routerLink]="'/list'" routerLinkActive="active">{{ 'jobs' | uppercase }}</div>
+        <div class="d-flex flex-grow-1 align-items-center justify-content-center tab" [routerLink]="'/favorites'" routerLinkActive="active">{{ 'favorites' | uppercase }}</div>
+    </div>
+    <router-outlet></router-outlet>
+</div>

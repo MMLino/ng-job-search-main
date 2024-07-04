@@ -1,0 +1,6 @@
+<ng-container *ngIf="jobs$ | async as jobs; else noFavTemplate">
+    <app-job-element-list *ngFor="let item of jobs" [job]="item" [isFromFavorites]="true"></app-job-element-list>
+</ng-container>
+<ng-template #noFavTemplate>
+    <div>No favorites selected</div>
+</ng-template>

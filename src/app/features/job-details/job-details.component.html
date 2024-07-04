@@ -1,0 +1,20 @@
+<div class="go-back mt-3" (click)="goBack()">Back</div>
+<ng-container *ngIf="jobDetail$ | async as job">
+    <div class="d-flex align-items-center job-card mt-4">
+        <div class="image-container">
+            <img class="logo" src="{{ job.companyLogo }}" alt="Logo: {{ job.companyName }}">
+        </div>
+        <div class="d-flex flex-column flex-grow-1 ms-3">
+            <h2 class="job-title">{{ job.title }}</h2>
+            <div class="d-flex">
+                <span *ngFor="let t of job.types; let first = first" [class.ms-3]="!first">{{ t }}</span>
+                <span *ngFor="let i of job.industries" class="ms-3">{{ i }}</span>
+            </div>
+        </div>
+    </div>
+    <div><strong>Publish date:</strong> {{job.publishDate}}</div>
+    <div><strong>Location:</strong> {{job.location}}</div>
+    <div><strong>Reference:</strong> {{job.reference}}</div>
+    <strong>Description:</strong>
+    <div [innerHTML]="job.description"></div>
+</ng-container>

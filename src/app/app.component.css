@@ -1,0 +1,26 @@
+.head {
+    position: fixed;
+}
+h1 {
+    text-align: center;
+}
+
+.tab-container {
+    border-bottom: .1rem solid #ffffff;
+}
+
+.tab {
+    cursor: pointer;
+    height: 5rem;
+}
+
+.tab.active {
+    font-weight: bold;
+    border-bottom: .2rem solid #ffffff;
+    border-left: .1rem solid #ffffff;
+    border-right: .12rem solid #ffffff;
+}
+.tab:hover {
+    font-weight: bold;
+    border-bottom: .2rem solid #ffffff;
+}
