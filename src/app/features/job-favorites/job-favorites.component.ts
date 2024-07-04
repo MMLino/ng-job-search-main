@@ -46,7 +46,8 @@ export class JobFavoritesComponent { // OLD --> implements OnDestroy {
   // end - OLD
   private _drawFavoritesList(): Observable<Job[] | null> {
     return this.jobService.jobs().pipe(map((data: Job[]) => { // map used to modify the list. needed to return only favorites
-      return filter(data, d => includes(this.favIdsFromLocal, d.id)); // filtering jobs retrieved
+      const favs = filter(data, d => includes(this.favIdsFromLocal, d.id)); // filtering jobs retrieved
+      return favs.length ? favs : null; // if favs is empty return a null value, favs otherwise
     }));
   }
 
